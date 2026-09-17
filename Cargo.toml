@@ -1,0 +1,41 @@
+[package]
+name = "sway"
+version = "0.1.0"
+edition = "2021"
+description = "Sway - 基于 SSH 隧道的系统级全局代理工具"
+authors = ["Sway"]
+license = "MIT"
+
+[dependencies]
+anyhow = "1"
+bytes = "1"
+dirs = "6"
+eframe = { version = "0.31", default-features = true, features = ["default_fonts", "glow", "wgpu"] }
+egui = "0.31"
+# eframe 自带的 wgpu 默认未开 dx12；显式启用，避免 Windows Server / RDP 下 OpenGL 空白界面
+wgpu = { version = "24", default-features = true }
+rfd = "0.15"
+russh = { version = "0.63", default-features = false, features = ["flate2", "ring", "rsa"] }
+ssh-key = { version = "=0.7.0-rc.11", default-features = false, features = ["std", "alloc", "ed25519", "getrandom", "rand_core"] }
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+toml = "0.8"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.55"
+windows = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_Networking_WinInet",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_SystemServices",
+] }
+
+[build-dependencies]
+winresource = "0.1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
