@@ -18,10 +18,14 @@ impl ProxyEndpoints {
         }
     }
 
+    /// Used by Windows user-env proxy setup (`windows_impl`).
+    #[cfg_attr(not(windows), allow(dead_code))]
     pub fn http_url(&self) -> String {
         format!("http://{}:{}", self.http_host, self.http_port)
     }
 
+    /// Used by Windows user-env proxy setup (`windows_impl`).
+    #[cfg_attr(not(windows), allow(dead_code))]
     pub fn socks_url(&self) -> String {
         format!("socks5://{}:{}", self.socks_host, self.socks_port)
     }

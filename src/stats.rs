@@ -71,7 +71,7 @@ impl TrafficStats {
     pub fn end_flow(&self) {
         let _ = self
             .active_conns
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |v| {
+            .try_update(Ordering::Relaxed, Ordering::Relaxed, |v| {
                 Some(v.saturating_sub(1))
             });
     }
@@ -80,7 +80,7 @@ impl TrafficStats {
         self.failed_conns.fetch_add(1, Ordering::Relaxed);
         let _ = self
             .active_conns
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |v| {
+            .try_update(Ordering::Relaxed, Ordering::Relaxed, |v| {
                 Some(v.saturating_sub(1))
             });
     }
